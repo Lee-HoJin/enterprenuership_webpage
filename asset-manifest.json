@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/enterprenuership_webpage/static/css/main.e6c13ad2.css",
+    "main.js": "/enterprenuership_webpage/static/js/main.5140c61e.js",
+    "static/js/453.5537cfbf.chunk.js": "/enterprenuership_webpage/static/js/453.5537cfbf.chunk.js",
+    "index.html": "/enterprenuership_webpage/index.html",
+    "main.e6c13ad2.css.map": "/enterprenuership_webpage/static/css/main.e6c13ad2.css.map",
+    "main.5140c61e.js.map": "/enterprenuership_webpage/static/js/main.5140c61e.js.map",
+    "453.5537cfbf.chunk.js.map": "/enterprenuership_webpage/static/js/453.5537cfbf.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.5140c61e.js"
+  ]
+}
