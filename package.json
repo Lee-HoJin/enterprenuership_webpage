@@ -1,7 +1,7 @@
 {
   "name": "dorm_move",
   "version": "0.1.0",
-  "proxy": "http://172.29.122.76:3001",
+  "proxy": "https://dorm-move-pchec6qkf-hojins-projects-6fa27b7e.vercel.app/api/",
   "private": true,
   "homepage": "https://Lee-HoJin.github.io/enterprenuership_webpage",
   "dependencies": {

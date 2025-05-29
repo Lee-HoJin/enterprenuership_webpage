@@ -1,5 +1,5 @@
 // src/services/api.js
-const API_BASE_URL = 'https://dorm-move-pchec6qkf-hojins-projects-6fa27b7e.vercel.app/api';
+const API_BASE_URL = 'http://172.29.122.76:3001';
 
 // 기본 fetch 래퍼
 const apiRequest = async (endpoint, options = {}) => {

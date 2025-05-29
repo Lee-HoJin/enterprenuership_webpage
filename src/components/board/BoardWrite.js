@@ -149,9 +149,10 @@ export default function BoardWrite() {
             <Box component="form" onSubmit={handleSubmit} noValidate>
               <Stack spacing={3}>
                 {/* 카테고리 선택 */}
-                <FormControl fullWidth error={!!errors.category}>
-                  <InputLabel>카테고리</InputLabel>
+                <FormControl fullWidth margin="normal" error={!!errors.category}>
+                  <InputLabel id="category-label">카테고리</InputLabel>
                   <Select
+                    labelId="category-label"
                     name="category"
                     value={formData.category}
                     onChange={handleChange}
@@ -180,6 +181,7 @@ export default function BoardWrite() {
                   helperText={errors.title || `${formData.title.length}/100`}
                   fullWidth
                   required
+                  margin="normal"
                   placeholder="게시글 제목을 입력하세요"
                 />
 
@@ -195,6 +197,7 @@ export default function BoardWrite() {
                   multiline
                   rows={12}
                   required
+                  margin="normal"
                   placeholder="게시글 내용을 입력하세요..."
                 />
 
@@ -229,6 +232,7 @@ export default function BoardWrite() {
             </Box>
           </CardContent>
         </Card>
+
 
         {/* 작성 팁 */}
         <Box sx={{ mt: 4, p: 3, bgcolor: 'primary.50', borderRadius: 2 }}>

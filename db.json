@@ -38,13 +38,13 @@
     {
       "id": "1",
       "type": "help_request",
-      "title": "3동에서 5동 이사 도움 필요해요!",
+      "title": "303동에서 305동 이사 도움 필요해요!",
       "authorId": 1,
       "authorName": "김학생",
       "authorPhone": "010-1234-5678",
       "authorGender": "남성",
-      "fromBuilding": "3동",
-      "toBuilding": "5동",
+      "fromBuilding": "303동",
+      "toBuilding": "305동",
       "fromRoom": "301호",
       "toRoom": "512호",
       "moveDate": "2025-06-01",
@@ -82,13 +82,13 @@
     {
       "id": "3",
       "type": "help_request",
-      "title": "1동에서 7동 급하게 이사 도움 구해요!",
+      "title": "301동에서 307동 급하게 이사 도움 구해요!",
       "authorId": 1,
       "authorName": "김학생",
       "authorPhone": "010-1234-5678",
       "authorGender": "남성",
-      "fromBuilding": "1동",
-      "toBuilding": "7동",
+      "fromBuilding": "301동",
+      "toBuilding": "307동",
       "fromRoom": "205호",
       "toRoom": "301호",
       "moveDate": "2025-05-30",
@@ -119,37 +119,37 @@
   "buildings": [
     {
       "id": "1",
-      "name": "1동",
+      "name": "301동",
       "type": "남학생"
     },
     {
       "id": "2",
-      "name": "2동",
+      "name": "302동",
       "type": "남학생"
     },
     {
       "id": "3",
-      "name": "3동",
+      "name": "303동",
       "type": "남학생"
     },
     {
       "id": "4",
-      "name": "4동",
+      "name": "304동",
       "type": "여학생"
     },
     {
       "id": "5",
-      "name": "5동",
+      "name": "305동",
       "type": "여학생"
     },
     {
       "id": "6",
-      "name": "6동",
+      "name": "306동",
       "type": "여학생"
     },
     {
       "id": "7",
-      "name": "7동",
+      "name": "307동",
       "type": "남학생"
     }
   ]

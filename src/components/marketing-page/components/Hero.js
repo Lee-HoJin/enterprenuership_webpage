@@ -80,7 +80,7 @@ export default function Hero() {
               <Box component="span" sx={{ 
                 '& br': { display: { xs: 'block', sm: 'none' } } 
               }}>
-                UNIST Dormitory Movement{/* 모바일에서 줄바꿈 */}
+                UNIST Dormitory Moves{/* 모바일에서 줄바꿈 */}
                 <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>
                   &nbsp;
                 </Box>

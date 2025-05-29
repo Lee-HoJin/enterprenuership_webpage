@@ -115,7 +115,7 @@ export default function SignUp(props) {
 
     try {
       // 이메일 중복 확인을 위해 기존 사용자 조회
-      const response = await fetch(`http://172.29.122.76:3001/users?email=${formData.email}`);
+      const response = await fetch(`https://dorm-move-pchec6qkf-hojins-projects-6fa27b7e.vercel.app/api/users?email=${formData.email}`);
       const existingUsers = await response.json();
       
       if (existingUsers.length > 0) {
