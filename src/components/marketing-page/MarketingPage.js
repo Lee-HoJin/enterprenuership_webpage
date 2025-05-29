@@ -18,8 +18,6 @@ export default function MarketingPage(props) {
       <div>
         <Testimonials />
         <Divider />
-        <Pricing />
-        <Divider />
         <Footer />
       </div>
     </AppTheme>
