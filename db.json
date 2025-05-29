@@ -1,5 +1,156 @@
 {
-    "users": [],
-    "posts": [],
-    "comments": []
-  }
+  "users": [
+    {
+      "id": "1",
+      "email": "test@unist.ac.kr",
+      "password": "123456",
+      "name": "김학생",
+      "phone": "010-1234-5678",
+      "gender": "남성",
+      "dormitory": "3동",
+      "studentId": "20231234",
+      "createdAt": "2025-05-29T10:00:00Z"
+    },
+    {
+      "id": "2",
+      "email": "helper@unist.ac.kr",
+      "password": "123456",
+      "name": "박도우미",
+      "phone": "010-9876-5432",
+      "gender": "여성",
+      "dormitory": "5동",
+      "studentId": "20225678",
+      "createdAt": "2025-05-28T15:30:00Z"
+    },
+    {
+      "id": "510e",
+      "name": "이름",
+      "email": "a@a.com",
+      "password": "123123",
+      "phone": "010-2049-7636",
+      "gender": "남성",
+      "dormitory": "1동",
+      "studentId": "20171358",
+      "createdAt": "2025-05-29T11:37:46.563Z"
+    }
+  ],
+  "posts": [
+    {
+      "id": "1",
+      "type": "help_request",
+      "title": "3동에서 5동 이사 도움 필요해요!",
+      "authorId": 1,
+      "authorName": "김학생",
+      "authorPhone": "010-1234-5678",
+      "authorGender": "남성",
+      "fromBuilding": "3동",
+      "toBuilding": "5동",
+      "fromRoom": "301호",
+      "toRoom": "512호",
+      "moveDate": "2025-06-01",
+      "moveTime": "14:00",
+      "price": 20000,
+      "description": "짐이 많지 않아요. 책상, 의자, 옷 정도입니다. 1-2시간 정도 소요될 것 같아요.",
+      "status": "open",
+      "createdAt": "2025-05-29T10:30:00Z",
+      "updatedAt": "2025-05-29T10:30:00Z",
+      "views": 15,
+      "applicants": []
+    },
+    {
+      "id": "2",
+      "type": "help_offer",
+      "title": "이사 도와드립니다! (남학생 한정)",
+      "authorId": 2,
+      "authorName": "박도우미",
+      "authorPhone": "010-9876-5432",
+      "authorGender": "여성",
+      "fromBuilding": "",
+      "toBuilding": "",
+      "fromRoom": "",
+      "toRoom": "",
+      "moveDate": "2025-06-01",
+      "moveTime": "13:00-17:00",
+      "price": 15000,
+      "description": "이사 경험 많습니다. 무거운 짐도 OK! 시간당 15,000원",
+      "status": "open",
+      "createdAt": "2025-05-28T16:00:00Z",
+      "updatedAt": "2025-05-28T16:00:00Z",
+      "views": 28,
+      "applicants": []
+    },
+    {
+      "id": "3",
+      "type": "help_request",
+      "title": "1동에서 7동 급하게 이사 도움 구해요!",
+      "authorId": 1,
+      "authorName": "김학생",
+      "authorPhone": "010-1234-5678",
+      "authorGender": "남성",
+      "fromBuilding": "1동",
+      "toBuilding": "7동",
+      "fromRoom": "205호",
+      "toRoom": "301호",
+      "moveDate": "2025-05-30",
+      "moveTime": "10:00",
+      "price": 30000,
+      "description": "내일 아침 10시! 짐이 좀 많아서 2명 정도 필요할 것 같아요.",
+      "status": "matched",
+      "createdAt": "2025-05-29T08:00:00Z",
+      "updatedAt": "2025-05-29T12:00:00Z",
+      "views": 42,
+      "applicants": [
+        2
+      ]
+    }
+  ],
+  "applications": [
+    {
+      "id": "1",
+      "postId": 3,
+      "applicantId": 2,
+      "applicantName": "박도우미",
+      "applicantPhone": "010-9876-5432",
+      "message": "경험 많아요! 내일 아침 시간 괜찮습니다.",
+      "status": "accepted",
+      "createdAt": "2025-05-29T11:30:00Z"
+    }
+  ],
+  "buildings": [
+    {
+      "id": "1",
+      "name": "1동",
+      "type": "남학생"
+    },
+    {
+      "id": "2",
+      "name": "2동",
+      "type": "남학생"
+    },
+    {
+      "id": "3",
+      "name": "3동",
+      "type": "남학생"
+    },
+    {
+      "id": "4",
+      "name": "4동",
+      "type": "여학생"
+    },
+    {
+      "id": "5",
+      "name": "5동",
+      "type": "여학생"
+    },
+    {
+      "id": "6",
+      "name": "6동",
+      "type": "여학생"
+    },
+    {
+      "id": "7",
+      "name": "7동",
+      "type": "남학생"
+    }
+  ]
+}

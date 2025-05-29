@@ -1,248 +1,362 @@
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom'; // 추가
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
-import { styled } from '@mui/material/styles';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  Box,
+  Container,
+  Typography,
+  Button,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Card,
+  CardContent,
+  Stack,
+  CssBaseline,
+  Alert,
+  CircularProgress
+} from '@mui/material';
+import {
+  Save as SaveIcon,
+  ArrowBack as ArrowBackIcon
+} from '@mui/icons-material';
 import AppTheme from '../shared-theme/AppTheme';
 import ColorModeSelect from '../shared-theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon, SitemarkIcon } from './components/CustomIcons';
-
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignSelf: 'center',
-  width: '100%',
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  margin: 'auto',
-  boxShadow:
-    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-  [theme.breakpoints.up('sm')]: {
-    width: '450px',
-  },
-  ...theme.applyStyles('dark', {
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
-}));
-
-const SignUpContainer = styled(Stack)(({ theme }) => ({
-  height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
-  minHeight: '100%',
-  padding: theme.spacing(2),
-  [theme.breakpoints.up('sm')]: {
-    padding: theme.spacing(4),
-  },
-  '&::before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    zIndex: -1,
-    inset: 0,
-    backgroundImage:
-      'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-    backgroundRepeat: 'no-repeat',
-    ...theme.applyStyles('dark', {
-      backgroundImage:
-        'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-    }),
-  },
-}));
+import { userAPI, authUtils } from '../../services/api';
 
 export default function SignUp(props) {
-  const navigate = useNavigate(); // 추가
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    phone: '',
+    gender: '',
+    dormitory: '',
+    studentId: ''
+  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  const validateInputs = () => {
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-    const name = document.getElementById('name');
+  const dormitories = ['1동', '2동', '3동', '4동', '5동', '6동', '7동'];
+  const genders = ['남성', '여성'];
 
-    let isValid = true;
-
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
-      isValid = false;
-    } else {
-      setEmailError(false);
-      setEmailErrorMessage('');
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    
+    // 에러 제거
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
     }
-
-    if (!password.value || password.value.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
-    if (!name.value || name.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage('Name is required.');
-      isValid = false;
-    } else {
-      setNameError(false);
-      setNameErrorMessage('');
-    }
-
-    return isValid;
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); // 추가
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) {
+      newErrors.name = '이름을 입력해주세요';
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = '이메일을 입력해주세요';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = '올바른 이메일 형식을 입력해주세요';
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = '비밀번호를 입력해주세요';
+    } else if (formData.password.length < 6) {
+      newErrors.password = '비밀번호는 6자 이상이어야 합니다';
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = '전화번호를 입력해주세요';
+    } else if (!/^010-\d{4}-\d{4}$/.test(formData.phone)) {
+      newErrors.phone = '올바른 전화번호 형식을 입력해주세요 (010-0000-0000)';
+    }
+
+    if (!formData.gender) {
+      newErrors.gender = '성별을 선택해주세요';
+    }
+
+    if (!formData.dormitory) {
+      newErrors.dormitory = '기숙사동을 선택해주세요';
+    }
+
+    if (!formData.studentId.trim()) {
+      newErrors.studentId = '학번을 입력해주세요';
+    } else if (!/^\d{8}$/.test(formData.studentId)) {
+      newErrors.studentId = '8자리 학번을 입력해주세요';
+    }
+
+    return newErrors;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     
-    if (!validateInputs()) {
+    const newErrors = validateForm();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       return;
     }
 
-    const data = new FormData(event.currentTarget);
-    const userData = {
-      name: data.get('name'),
-      email: data.get('email'),
-      password: data.get('password'),
-    };
-    
-    console.log(userData);
+    setLoading(true);
+    setErrors({});
 
-    // 회원가입 성공 처리
-    alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.');
+    try {
+      // 이메일 중복 확인을 위해 기존 사용자 조회
+      const response = await fetch(`http://172.29.122.76:3001/users?email=${formData.email}`);
+      const existingUsers = await response.json();
+      
+      if (existingUsers.length > 0) {
+        setErrors({ email: '이미 가입된 이메일입니다' });
+        setLoading(false);
+        return;
+      }
+
+      // 회원가입 진행
+      const newUser = await userAPI.register({
+        ...formData,
+        createdAt: new Date().toISOString()
+      });
+
+      console.log('회원가입 성공:', newUser);
+      setSuccess(true);
+      
+      // 2초 후 로그인 페이지로 이동
+      setTimeout(() => {
+        navigate('/signin', { 
+          state: { 
+            message: '회원가입이 완료되었습니다. 로그인해주세요.',
+            email: formData.email 
+          }
+        });
+      }, 2000);
+
+    } catch (error) {
+      console.error('회원가입 실패:', error);
+      setErrors({ submit: '회원가입 중 오류가 발생했습니다. 다시 시도해주세요.' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
     navigate('/signin');
   };
 
-  // 로그인 페이지로 이동하는 함수 추가
-  const handleSignInClick = () => {
-    navigate('/signin');
-  };
+  if (success) {
+    return (
+      <AppTheme {...props}>
+        <CssBaseline enableColorScheme />
+        <Container maxWidth="md" sx={{ py: 8 }}>
+          <Box sx={{ textAlign: 'center' }}>
+            <Alert severity="success" sx={{ mb: 3 }}>
+              🎉 회원가입이 완료되었습니다!
+            </Alert>
+            <Typography variant="h6">
+              잠시 후 로그인 페이지로 이동합니다...
+            </Typography>
+          </Box>
+        </Container>
+      </AppTheme>
+    );
+  }
 
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
       <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
-      <SignUpContainer direction="column" justifyContent="space-between">
-        <Card variant="outlined">
-          <SitemarkIcon />
-          <Typography
-            component="h1"
-            variant="h4"
-            sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
+      
+      <Container maxWidth="md" sx={{ py: 8 }}>
+        {/* 헤더 */}
+        <Box sx={{ mb: 4 }}>
+          <Button
+            startIcon={<ArrowBackIcon />}
+            onClick={handleCancel}
+            sx={{ mb: 2 }}
           >
-            Sign up
+            로그인으로 돌아가기
+          </Button>
+          <Typography variant="h3" component="h1" gutterBottom>
+            🏠 회원가입
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-          >
-            <FormControl>
-              <FormLabel htmlFor="name">Full name</FormLabel>
-              <TextField
-                autoComplete="name"
-                name="name"
-                required
-                fullWidth
-                id="name"
-                placeholder="Jon Snow"
-                error={nameError}
-                helperText={nameErrorMessage}
-                color={nameError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                placeholder="your@email.com"
-                name="email"
-                autoComplete="email"
-                variant="outlined"
-                error={emailError}
-                helperText={emailErrorMessage}
-                color={emailError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                placeholder="••••••"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                variant="outlined"
-                error={passwordError}
-                helperText={passwordErrorMessage}
-                color={passwordError ? 'error' : 'primary'}
-              />
-            </FormControl>
-            <FormControlLabel
-              control={<Checkbox value="allowExtraEmails" color="primary" />}
-              label="I want to receive updates via email."
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-            >
-              Sign up
-            </Button>
-          </Box>
-          <Divider>
-            <Typography sx={{ color: 'text.secondary' }}>or</Typography>
-          </Divider>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Google 회원가입 기능은 아직 구현되지 않았습니다.')}
-              startIcon={<GoogleIcon />}
-            >
-              Sign up with Google
-            </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Facebook 회원가입 기능은 아직 구현되지 않았습니다.')}
-              startIcon={<FacebookIcon />}
-            >
-              Sign up with Facebook
-            </Button>
-            <Typography sx={{ textAlign: 'center' }}>
-              Already have an account?{' '}
-              <Link
-                component="button"
-                type="button"
-                onClick={handleSignInClick}
-                variant="body2"
-                sx={{ alignSelf: 'center', cursor: 'pointer' }}
-              >
-                Sign in
-              </Link>
-            </Typography>
-          </Box>
+          <Typography variant="body1" color="text.secondary">
+            UNIST 기숙사 이사 도우미 서비스에 가입하세요
+          </Typography>
+        </Box>
+
+        {/* 회원가입 폼 */}
+        <Card>
+          <CardContent sx={{ p: 4 }}>
+            {errors.submit && (
+              <Alert severity="error" sx={{ mb: 3 }}>
+                {errors.submit}
+              </Alert>
+            )}
+
+            <Box component="form" onSubmit={handleSubmit} noValidate>
+              <Stack spacing={3}>
+                {/* 이름 */}
+                <TextField
+                  name="name"
+                  label="이름"
+                  value={formData.name}
+                  onChange={handleChange}
+                  error={!!errors.name}
+                  helperText={errors.name}
+                  fullWidth
+                  required
+                  placeholder="홍길동"
+                />
+
+                {/* 이메일 */}
+                <TextField
+                  name="email"
+                  label="이메일"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  error={!!errors.email}
+                  helperText={errors.email}
+                  fullWidth
+                  required
+                  placeholder="student@unist.ac.kr"
+                />
+
+                {/* 비밀번호 */}
+                <TextField
+                  name="password"
+                  label="비밀번호"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  error={!!errors.password}
+                  helperText={errors.password}
+                  fullWidth
+                  required
+                  placeholder="6자 이상 입력하세요"
+                />
+
+                {/* 전화번호 */}
+                <TextField
+                  name="phone"
+                  label="전화번호"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  error={!!errors.phone}
+                  helperText={errors.phone}
+                  fullWidth
+                  required
+                  placeholder="010-0000-0000"
+                />
+
+                {/* 성별 */}
+                <FormControl fullWidth error={!!errors.gender} required>
+                  <InputLabel>성별</InputLabel>
+                  <Select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    label="성별"
+                  >
+                    {genders.map((gender) => (
+                      <MenuItem key={gender} value={gender}>
+                        {gender}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {errors.gender && (
+                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 2 }}>
+                      {errors.gender}
+                    </Typography>
+                  )}
+                </FormControl>
+
+                {/* 기숙사동 */}
+                <FormControl fullWidth error={!!errors.dormitory} required>
+                  <InputLabel>현재 기숙사동</InputLabel>
+                  <Select
+                    name="dormitory"
+                    value={formData.dormitory}
+                    onChange={handleChange}
+                    label="현재 기숙사동"
+                  >
+                    {dormitories.map((dorm) => (
+                      <MenuItem key={dorm} value={dorm}>
+                        {dorm}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {errors.dormitory && (
+                    <Typography variant="caption" color="error" sx={{ mt: 0.5, ml: 2 }}>
+                      {errors.dormitory}
+                    </Typography>
+                  )}
+                </FormControl>
+
+                {/* 학번 */}
+                <TextField
+                  name="studentId"
+                  label="학번"
+                  value={formData.studentId}
+                  onChange={handleChange}
+                  error={!!errors.studentId}
+                  helperText={errors.studentId}
+                  fullWidth
+                  required
+                  placeholder="20231234"
+                />
+
+                {/* 버튼들 */}
+                <Stack direction="row" spacing={2} justifyContent="flex-end">
+                  <Button
+                    type="button"
+                    variant="outlined"
+                    onClick={handleCancel}
+                    size="large"
+                    disabled={loading}
+                  >
+                    취소
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    startIcon={loading ? <CircularProgress size={20} /> : <SaveIcon />}
+                    size="large"
+                    disabled={loading}
+                  >
+                    {loading ? '가입 중...' : '회원가입'}
+                  </Button>
+                </Stack>
+              </Stack>
+            </Box>
+          </CardContent>
         </Card>
-      </SignUpContainer>
+
+        {/* 안내사항 */}
+        <Box sx={{ mt: 4, p: 3, bgcolor: 'primary.50', borderRadius: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            📋 회원가입 안내
+          </Typography>
+          <Typography variant="body2" component="div">
+            • UNIST 학생만 가입 가능합니다<br/>
+            • 실명과 올바른 연락처를 입력해주세요<br/>
+            • 안전한 거래를 위해 신뢰할 수 있는 정보를 제공해주세요<br/>
+            • 가입 후 이사 도움 요청 및 제공 서비스를 이용할 수 있습니다
+          </Typography>
+        </Box>
+      </Container>
     </AppTheme>
   );
 }

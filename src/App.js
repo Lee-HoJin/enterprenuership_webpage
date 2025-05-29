@@ -22,7 +22,7 @@ function App() {
       <CssBaseline />
       <Router> 
         <Routes>
-          {/* 메인 페이지 - 마케팅 페이지 */}
+          {/* 메인 페이지 - 마케팅 페이지 */} 
           <Route path="/" element={<MarketingPage />} />
           
           {/* 로그인 페이지들 */}

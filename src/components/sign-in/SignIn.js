@@ -1,25 +1,30 @@
-import * as React from 'react';
-import { useNavigate } from 'react-router-dom'; // 추가
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import CssBaseline from '@mui/material/CssBaseline';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Divider from '@mui/material/Divider';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import Link from '@mui/material/Link';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import MuiCard from '@mui/material/Card';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import {
+  Box,
+  Button,
+  Checkbox,
+  CssBaseline,
+  FormControlLabel,
+  Divider,
+  FormLabel,
+  FormControl,
+  Link,
+  TextField,
+  Typography,
+  Stack,
+  Card,
+  Alert,
+  CircularProgress
+} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from './components/ForgotPassword';
 import AppTheme from '../shared-theme/AppTheme';
 import ColorModeSelect from '../shared-theme/ColorModeSelect';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './components/CustomIcons';
+import { userAPI, authUtils } from '../../services/api';
 
-const Card = styled(MuiCard)(({ theme }) => ({
+const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignSelf: 'center',
@@ -62,12 +67,26 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignIn(props) {
-  const navigate = useNavigate(); // 추가
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  // 회원가입에서 온 경우 메시지 표시
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message);
+      // 3초 후 메시지 제거
+      setTimeout(() => setSuccessMessage(''), 3000);
+    }
+  }, [location.state]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -77,26 +96,44 @@ export default function SignIn(props) {
     setOpen(false);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); // 추가
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     
     if (!validateInputs()) {
       return;
     }
 
+    setLoading(true);
+    setLoginError('');
+
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
     
-    console.log({
-      email: email,
-      password: password,
-    });
+    console.log('로그인 시도:', { email });
 
-    // 여기서 실제 로그인 처리를 할 수 있어요
-    // 지금은 간단히 메인 페이지로 이동
-    alert('로그인 성공! 메인 페이지로 이동합니다.');
-    navigate('/');
+    try {
+      // API를 통해 로그인 시도
+      const user = await userAPI.login(email, password);
+      
+      console.log('로그인 성공:', user);
+      
+      // 로그인 정보를 로컬 스토리지에 저장
+      authUtils.setUser(user);
+      
+      // 성공 메시지 표시
+      alert(`${user.name}님, 환영합니다!`);
+      
+      // 메인 페이지로 이동 (또는 이전 페이지로)
+      const redirectTo = location.state?.from || '/';
+      navigate(redirectTo);
+      
+    } catch (error) {
+      console.error('로그인 실패:', error);
+      setLoginError('이메일 또는 비밀번호가 올바르지 않습니다.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const validateInputs = () => {
@@ -107,7 +144,7 @@ export default function SignIn(props) {
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
+      setEmailErrorMessage('올바른 이메일 주소를 입력해주세요.');
       isValid = false;
     } else {
       setEmailError(false);
@@ -116,7 +153,7 @@ export default function SignIn(props) {
 
     if (!password.value || password.value.length < 6) {
       setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
+      setPasswordErrorMessage('비밀번호는 6자 이상이어야 합니다.');
       isValid = false;
     } else {
       setPasswordError(false);
@@ -126,7 +163,6 @@ export default function SignIn(props) {
     return isValid;
   };
 
-  // 회원가입 페이지로 이동하는 함수 추가
   const handleSignUpClick = () => {
     navigate('/signup');
   };
@@ -136,15 +172,30 @@ export default function SignIn(props) {
       <CssBaseline enableColorScheme />
       <SignInContainer direction="column" justifyContent="space-between">
         <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
-        <Card variant="outlined">
+        <StyledCard variant="outlined">
           <SitemarkIcon />
           <Typography
             component="h1"
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Sign in
+            🔐 로그인
           </Typography>
+
+          {/* 성공 메시지 */}
+          {successMessage && (
+            <Alert severity="success" sx={{ mb: 2 }}>
+              {successMessage}
+            </Alert>
+          )}
+
+          {/* 로그인 에러 메시지 */}
+          {loginError && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {loginError}
+            </Alert>
+          )}
+
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -157,24 +208,25 @@ export default function SignIn(props) {
             }}
           >
             <FormControl>
-              <FormLabel htmlFor="email">Email</FormLabel>
+              <FormLabel htmlFor="email">이메일</FormLabel>
               <TextField
                 error={emailError}
                 helperText={emailErrorMessage}
                 id="email"
                 type="email"
                 name="email"
-                placeholder="your@email.com"
+                placeholder="your@unist.ac.kr"
                 autoComplete="email"
                 autoFocus
                 required
                 fullWidth
                 variant="outlined"
                 color={emailError ? 'error' : 'primary'}
+                defaultValue={location.state?.email || ''}
               />
             </FormControl>
             <FormControl>
-              <FormLabel htmlFor="password">Password</FormLabel>
+              <FormLabel htmlFor="password">비밀번호</FormLabel>
               <TextField
                 error={passwordError}
                 helperText={passwordErrorMessage}
@@ -191,15 +243,17 @@ export default function SignIn(props) {
             </FormControl>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="로그인 상태 유지"
             />
             <ForgotPassword open={open} handleClose={handleClose} />
             <Button
               type="submit"
               fullWidth
               variant="contained"
+              disabled={loading}
+              startIcon={loading ? <CircularProgress size={20} /> : null}
             >
-              Sign in
+              {loading ? '로그인 중...' : '로그인'}
             </Button>
             <Link
               component="button"
@@ -208,29 +262,31 @@ export default function SignIn(props) {
               variant="body2"
               sx={{ alignSelf: 'center' }}
             >
-              Forgot your password?
+              비밀번호를 잊으셨나요?
             </Link>
           </Box>
-          <Divider>or</Divider>
+          <Divider>또는</Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => alert('Google 로그인 기능은 아직 구현되지 않았습니다.')}
+              onClick={() => alert('소셜 로그인은 아직 준비 중입니다.')}
               startIcon={<GoogleIcon />}
+              disabled
             >
-              Sign in with Google
+              Google로 로그인
             </Button>
             <Button
               fullWidth
               variant="outlined"
-              onClick={() => alert('Facebook 로그인 기능은 아직 구현되지 않았습니다.')}
+              onClick={() => alert('소셜 로그인은 아직 준비 중입니다.')}
               startIcon={<FacebookIcon />}
+              disabled
             >
-              Sign in with Facebook
+              Facebook으로 로그인
             </Button>
             <Typography sx={{ textAlign: 'center' }}>
-              Don&apos;t have an account?{' '}
+              계정이 없으신가요?{' '}
               <Link
                 component="button"
                 type="button"
@@ -238,11 +294,11 @@ export default function SignIn(props) {
                 variant="body2"
                 sx={{ alignSelf: 'center', cursor: 'pointer' }}
               >
-                Sign up
+                회원가입
               </Link>
             </Typography>
           </Box>
-        </Card>
+        </StyledCard>
       </SignInContainer>
     </AppTheme>
   );
