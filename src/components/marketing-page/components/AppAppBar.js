@@ -90,15 +90,7 @@ export default function AppAppBar() {
                 size="small"
                 onClick={() => navigate('/board')}
               >
-                게시판
-              </Button>
-              <Button 
-                variant="text" 
-                color="info" 
-                size="small"
-                onClick={() => scrollToSection('features')}
-              >
-                Features
+                Board
               </Button>
               <Button 
                 variant="text" 
@@ -107,40 +99,6 @@ export default function AppAppBar() {
                 onClick={() => scrollToSection('testimonials')}
               >
                 Testimonials
-              </Button>
-              <Button 
-                variant="text" 
-                color="info" 
-                size="small"
-                onClick={() => scrollToSection('highlights')}
-              >
-                Highlights
-              </Button>
-              <Button 
-                variant="text" 
-                color="info" 
-                size="small"
-                onClick={() => scrollToSection('pricing')}
-              >
-                Pricing
-              </Button>
-              <Button 
-                variant="text" 
-                color="info" 
-                size="small" 
-                sx={{ minWidth: 0 }}
-                onClick={() => scrollToSection('faq')}
-              >
-                FAQ
-              </Button>
-              <Button 
-                variant="text" 
-                color="info" 
-                size="small" 
-                sx={{ minWidth: 0 }}
-                onClick={() => alert('블로그 페이지는 아직 준비중입니다.')}
-              >
-                Blog
               </Button>
             </Box>
           </Box>
@@ -204,18 +162,6 @@ export default function AppAppBar() {
                 </MenuItem>
                 <MenuItem onClick={() => { setOpen(false); scrollToSection('testimonials'); }}>
                   Testimonials
-                </MenuItem>
-                <MenuItem onClick={() => { setOpen(false); scrollToSection('highlights'); }}>
-                  Highlights
-                </MenuItem>
-                <MenuItem onClick={() => { setOpen(false); scrollToSection('pricing'); }}>
-                  Pricing
-                </MenuItem>
-                <MenuItem onClick={() => { setOpen(false); scrollToSection('faq'); }}>
-                  FAQ
-                </MenuItem>
-                <MenuItem onClick={() => { setOpen(false); alert('블로그 페이지는 아직 준비중입니다.'); }}>
-                  Blog
                 </MenuItem>
                 <Divider sx={{ my: 3 }} />
                 <MenuItem>

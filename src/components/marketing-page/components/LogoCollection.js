@@ -59,7 +59,7 @@ export default function LogoCollection() {
           <Grid key={index}>
             <img
               src={logo}
-              alt={`Fake company number ${index + 1}`}
+              alt={`Fake company number ${index + 1}`} 
               style={logoStyle}
             />
           </Grid>

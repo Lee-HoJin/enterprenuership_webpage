@@ -17,10 +17,10 @@ import BoardDetail from './components/board/BoardDetail';
 import BoardEdit from './components/board/BoardEdit';
 
 function App() {
-  return (
+  return (  
     <AppTheme>
       <CssBaseline />
-      <Router>
+      <Router> 
         <Routes>
           {/* 메인 페이지 - 마케팅 페이지 */}
           <Route path="/" element={<MarketingPage />} />
@@ -33,7 +33,7 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           
           {/* 게시판 페이지들 */}
-          <Route path="/board" element={<BoardList />} />
+          <Route path="/board" element={<BoardList />} /> 
           <Route path="/board/write" element={<BoardWrite />} />
           <Route path="/board/:id" element={<BoardDetail />} />
           <Route path="/board/:id/edit" element={<BoardEdit />} />
