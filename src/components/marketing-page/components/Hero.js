@@ -97,7 +97,7 @@ export default function Hero() {
               width: { sm: '100%', md: '80%' },
             }}
           >
-            Use our movement helping service! You can start our servive by posting.
+            Use our movement helping service! You can start our servive by posting. <br />
             Find a matching partner who will help you!
           </Typography>
           <Stack

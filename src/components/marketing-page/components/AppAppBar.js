@@ -90,7 +90,7 @@ export default function AppAppBar() {
                 size="small"
                 onClick={() => navigate('/board')}
               >
-                Board
+                Posts
               </Button>
               <Button 
                 variant="text" 
@@ -98,7 +98,7 @@ export default function AppAppBar() {
                 size="small"
                 onClick={() => scrollToSection('testimonials')}
               >
-                Testimonials
+                Preview
               </Button>
             </Box>
           </Box>
@@ -155,13 +155,10 @@ export default function AppAppBar() {
                 </Box>
 
                 <MenuItem onClick={() => { setOpen(false); navigate('/board'); }}>
-                  게시판
-                </MenuItem>
-                <MenuItem onClick={() => { setOpen(false); scrollToSection('features'); }}>
-                  Features
+                  Posts
                 </MenuItem>
                 <MenuItem onClick={() => { setOpen(false); scrollToSection('testimonials'); }}>
-                  Testimonials
+                  Preview
                 </MenuItem>
                 <Divider sx={{ my: 3 }} />
                 <MenuItem>

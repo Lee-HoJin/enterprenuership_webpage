@@ -1,97 +1,101 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import CardActions from '@mui/material/CardActions';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import { useColorScheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import {
+  Person as PersonIcon,
+  Schedule as ScheduleIcon,
+  Visibility as ViewIcon,
+  ArrowForward as ArrowForwardIcon
+} from '@mui/icons-material';
 
-const userTestimonials = [
+// 게시판 글 미리보기 데이터 (실제로는 API에서 가져올 데이터)
+const latestPosts = [
   {
-    avatar: <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />,
-    name: 'Remy Sharp',
-    occupation: 'Senior Engineer',
-    testimonial:
-      "I absolutely love how versatile this product is! Whether I'm tackling work projects or indulging in my favorite hobbies, it seamlessly adapts to my changing needs. Its intuitive design has truly enhanced my daily routine, making tasks more efficient and enjoyable.",
+    id: 1,
+    title: 'MUI를 사용한 React 개발 팁',
+    content: 'Material-UI를 효과적으로 사용하는 방법에 대해 알아보겠습니다. 테마 시스템 활용부터 반응형 디자인까지...',
+    author: '개발자김씨',
+    date: '2025-05-29',
+    views: 45,
+    category: '개발'
   },
   {
-    avatar: <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />,
-    name: 'Travis Howard',
-    occupation: 'Lead Product Designer',
-    testimonial:
-      "One of the standout features of this product is the exceptional customer support. In my experience, the team behind this product has been quick to respond and incredibly helpful. It's reassuring to know that they stand firmly behind their product.",
+    id: 2,
+    title: '웹 디자인 트렌드 2025',
+    content: '올해 주목해야 할 웹 디자인 트렌드들을 정리해보았습니다. 미니멀리즘부터 인터랙티브 요소까지...',
+    author: '디자이너박씨',
+    date: '2025-05-28',
+    views: 32,
+    category: '디자인'
   },
   {
-    avatar: <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />,
-    name: 'Cindy Baker',
-    occupation: 'CTO',
-    testimonial:
-      'The level of simplicity and user-friendliness in this product has significantly simplified my life. I appreciate the creators for delivering a solution that not only meets but exceeds user expectations.',
+    id: 3,
+    title: 'JavaScript ES2024 새로운 기능들',
+    content: '최신 JavaScript 기능들과 사용법을 알아보겠습니다. 새로운 문법과 성능 개선사항들을...',
+    author: '코더이씨',
+    date: '2025-05-27',
+    views: 67,
+    category: '개발'
   },
   {
-    avatar: <Avatar alt="Remy Sharp" src="/static/images/avatar/4.jpg" />,
-    name: 'Julia Stewart',
-    occupation: 'Senior Engineer',
-    testimonial:
-      "I appreciate the attention to detail in the design of this product. The small touches make a big difference, and it's evident that the creators focused on delivering a premium experience.",
+    id: 4,
+    title: 'UX/UI 디자인 기초',
+    content: '사용자 경험을 향상시키는 디자인 원칙들을 살펴보겠습니다. 사용성과 접근성을 고려한...',
+    author: 'UX전문가',
+    date: '2025-05-26',
+    views: 23,
+    category: '디자인'
   },
   {
-    avatar: <Avatar alt="Travis Howard" src="/static/images/avatar/5.jpg" />,
-    name: 'John Smith',
-    occupation: 'Product Designer',
-    testimonial:
-      "I've tried other similar products, but this one stands out for its innovative features. It's clear that the makers put a lot of thought into creating a solution that truly addresses user needs.",
+    id: 5,
+    title: 'React 18의 새로운 기능들',
+    content: 'Concurrent Features와 Automatic Batching에 대해 자세히 알아보겠습니다...',
+    author: '리액트마스터',
+    date: '2025-05-25',
+    views: 89,
+    category: '개발'
   },
   {
-    avatar: <Avatar alt="Cindy Baker" src="/static/images/avatar/6.jpg" />,
-    name: 'Daniel Wolf',
-    occupation: 'CDO',
-    testimonial:
-      "The quality of this product exceeded my expectations. It's durable, well-designed, and built to last. Definitely worth the investment!",
-  },
+    id: 6,
+    title: '모바일 퍼스트 디자인 전략',
+    content: '모바일을 우선으로 하는 디자인 접근법과 반응형 웹 구현 방법을 다루겠습니다...',
+    author: '모바일전문가',
+    date: '2025-05-24',
+    views: 54,
+    category: '디자인'
+  }
 ];
 
-const darkModeLogos = [
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/6560628e8573c43893fe0ace_Sydney-white.svg',
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/655f4d520d0517ae8e8ddf13_Bern-white.svg',
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/655f46794c159024c1af6d44_Montreal-white.svg',
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e891fa22f89efd7477a_TerraLight.svg',
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/6560a09d1f6337b1dfed14ab_colorado-white.svg',
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/655f5caa77bf7d69fb78792e_Ankara-white.svg',
-];
-
-const lightModeLogos = [
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/6560628889c3bdf1129952dc_Sydney-black.svg',
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/655f4d4d8b829a89976a419c_Bern-black.svg',
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/655f467502f091ccb929529d_Montreal-black.svg',
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e911fa22f2203d7514c_TerraDark.svg',
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/6560a0990f3717787fd49245_colorado-black.svg',
-  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/655f5ca4e548b0deb1041c33_Ankara-black.svg',
-];
-
-const logoStyle = {
-  width: '64px',
-  opacity: 0.3,
+const getCategoryColor = (category) => {
+  switch (category) {
+    case '개발':
+      return 'primary';
+    case '디자인':
+      return 'secondary';
+    default:
+      return 'default';
+  }
 };
 
 export default function Testimonials() {
-  const { mode, systemMode } = useColorScheme();
+  const navigate = useNavigate();
 
-  let logos;
-  if (mode === 'system') {
-    if (systemMode === 'light') {
-      logos = lightModeLogos;
-    } else {
-      logos = darkModeLogos;
-    }
-  } else if (mode === 'light') {
-    logos = lightModeLogos;
-  } else {
-    logos = darkModeLogos;
-  }
+  const handlePostClick = (postId) => {
+    navigate(`/board/${postId}`);
+  };
+
+  const handleViewAllClick = () => {
+    navigate('/board');
+  };
 
   return (
     <Container
@@ -106,6 +110,7 @@ export default function Testimonials() {
         gap: { xs: 3, sm: 6 },
       }}
     >
+      {/* 헤더 섹션 */}
       <Box
         sx={{
           width: { sm: '100%', md: '60%' },
@@ -118,57 +123,130 @@ export default function Testimonials() {
           gutterBottom
           sx={{ color: 'text.primary' }}
         >
-          Testimonials
+          Latest Posts
         </Typography>
         <Typography variant="body1" sx={{ color: 'text.secondary' }}>
-          See what our customers love about our products. Discover how we excel in
-          efficiency, durability, and satisfaction. Join us for quality, innovation,
-          and reliable support.
+          Match your needs here!
         </Typography>
       </Box>
-      <Grid container spacing={2}>
-        {userTestimonials.map((testimonial, index) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index} sx={{ display: 'flex' }}>
+
+      {/* 게시글 미리보기 카드들 */}
+      <Grid 
+        container 
+        spacing={3} 
+        justifyContent="center"
+        sx={{ maxWidth: '1200px' }}
+      >
+        {latestPosts.map((post) => (
+          <Grid item xs={12} sm={6} md={4} key={post.id}>
             <Card
-              variant="outlined"
               sx={{
+                height: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                flexGrow: 1,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: 4,
+                },
               }}
+              onClick={() => handlePostClick(post.id)}
             >
-              <CardContent>
+              <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                {/* 카테고리와 조회수 */}
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Chip
+                    label={post.category}
+                    color={getCategoryColor(post.category)}
+                    size="small"
+                    sx={{ mr: 1 }}
+                  />
+                  <Box sx={{ display: 'flex', alignItems: 'center', color: 'text.secondary' }}>
+                    <ViewIcon sx={{ fontSize: 14, mr: 0.5 }} />
+                    <Typography variant="caption">{post.views}</Typography>
+                  </Box>
+                </Box>
+
+                {/* 제목 */}
                 <Typography
-                  variant="body1"
+                  variant="h6"
+                  component="h3"
                   gutterBottom
-                  sx={{ color: 'text.secondary' }}
+                  sx={{
+                    fontWeight: 600,
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                  }}
                 >
-                  {testimonial.testimonial}
+                  {post.title}
                 </Typography>
+
+                {/* 내용 미리보기 */}
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    mb: 2,
+                  }}
+                >
+                  {post.content}
+                </Typography>
+
+                {/* 작성자 정보 */}
+                <Stack direction="row" spacing={2} alignItems="center" sx={{ color: 'text.secondary' }}>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <PersonIcon sx={{ fontSize: 16, mr: 0.5 }} />
+                    <Typography variant="caption">{post.author}</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <ScheduleIcon sx={{ fontSize: 16, mr: 0.5 }} />
+                    <Typography variant="caption">{post.date}</Typography>
+                  </Box>
+                </Stack>
               </CardContent>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <CardHeader
-                  avatar={testimonial.avatar}
-                  title={testimonial.name}
-                  subheader={testimonial.occupation}
-                />
-                <img
-                  src={logos[index]}
-                  alt={`Logo ${index + 1}`}
-                  style={logoStyle}
-                />
-              </Box>
+
+              <CardActions sx={{ p: 2, pt: 0 }}>
+                <Button
+                  size="small"
+                  endIcon={<ArrowForwardIcon />}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePostClick(post.id);
+                  }}
+                >
+                  See detail
+                </Button>
+              </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
+
+      {/* 게시판 전체 보기 버튼 */}
+      <Box sx={{ textAlign: 'center', mt: 4 }}>
+        <Button
+          variant="outlined"
+          size="large"
+          onClick={handleViewAllClick}
+          endIcon={<ArrowForwardIcon />}
+          sx={{
+            px: 4,
+            py: 1.5,
+            borderRadius: 2,
+            textTransform: 'none',
+            fontSize: '1.1rem',
+          }}
+        >
+          See all the posts
+        </Button>
+      </Box>
     </Container>
   );
 }

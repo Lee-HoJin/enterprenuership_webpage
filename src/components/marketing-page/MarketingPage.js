@@ -4,8 +4,6 @@ import Divider from '@mui/material/Divider';
 import AppTheme from '../shared-theme/AppTheme';
 import AppAppBar from './components/AppAppBar';
 import Hero from './components/Hero';
-import LogoCollection from './components/LogoCollection';
-import Pricing from './components/Pricing';
 import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
 
