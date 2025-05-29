@@ -62,44 +62,53 @@ export default function Hero() {
         }}
       >
         <Stack
-          spacing={2}
-          useFlexGap
-          sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
-        >
-          <Typography
-            variant="h1"
-            sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', sm: 'row' },
-              alignItems: 'center',
-              fontSize: 'clamp(3rem, 10vw, 3.5rem)',
-            }}
+            spacing={2}
+            useFlexGap
+            sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}
           >
-            UNIST&nbsp;Dormitory&nbsp;Movement&nbsp;
             <Typography
-              component="span"
               variant="h1"
-              sx={(theme) => ({
-                fontSize: 'inherit',
-                color: 'primary.main',
-                ...theme.applyStyles('dark', {
-                  color: 'primary.light',
-                }),
-              })}
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: 'center',
+                fontSize: 'clamp(2rem, 8vw, 3.5rem)', // 최소 크기를 3rem→2rem으로 줄임
+                textAlign: 'center', // 중앙 정렬 추가
+              }}
             >
-              Linking&nbsp;Service
+              {/* 모바일에서는 &nbsp; 제거 */}
+              <Box component="span" sx={{ 
+                '& br': { display: { xs: 'block', sm: 'none' } } 
+              }}>
+                UNIST Dormitory Movement{/* 모바일에서 줄바꿈 */}
+                <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>
+                  &nbsp;
+                </Box>
+              </Box>
+              <Typography
+                component="span"
+                variant="h1"
+                sx={(theme) => ({
+                  fontSize: 'inherit',
+                  color: 'primary.main',
+                  ...theme.applyStyles('dark', {
+                    color: 'primary.light',
+                  }),
+                })}
+              >
+                Linking Service
+              </Typography>
             </Typography>
-          </Typography>
-          <Typography
-            sx={{
-              textAlign: 'center',
-              color: 'text.secondary',
-              width: { sm: '100%', md: '80%' },
-            }}
-          >
-            Use our movement helping service! You can start our servive by posting. <br />
-            Find a matching partner who will help you!
-          </Typography>
+            <Typography
+              sx={{
+                textAlign: 'center',
+                color: 'text.secondary',
+                width: { sm: '100%', md: '80%' },
+              }}
+            >
+              Use our movement helping service! You can start our servive by posting. <br />
+              Find a matching partner who will help you!
+            </Typography>
           <Stack
             direction={{ xs: 'column', sm: 'row' }}
             spacing={1}
