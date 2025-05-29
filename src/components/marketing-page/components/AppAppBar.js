@@ -100,6 +100,22 @@ export default function AppAppBar() {
               >
                 Preview
               </Button>
+              <Button 
+                variant="text" 
+                color="info" 
+                size="small"
+                onClick={() => scrollToSection('pricing')}
+              >
+                Pricing
+              </Button>
+              <Button 
+                variant="text" 
+                color="info" 
+                size="small"
+                onClick={() => navigate('/board')}
+              >
+                About Service
+              </Button>
             </Box>
           </Box>
           <Box
@@ -159,6 +175,12 @@ export default function AppAppBar() {
                 </MenuItem>
                 <MenuItem onClick={() => { setOpen(false); scrollToSection('testimonials'); }}>
                   Preview
+                </MenuItem>
+                <MenuItem onClick={() => { setOpen(false); scrollToSection('pricing'); }}>
+                  Pricing
+                </MenuItem>
+                <MenuItem onClick={() => { setOpen(false); navigate('/about'); }}>
+                  About Service
                 </MenuItem>
                 <Divider sx={{ my: 3 }} />
                 <MenuItem>
