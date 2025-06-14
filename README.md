@@ -1,40 +1,40 @@
 # Enterprenuership Project (EN/KOR)
 
-This repository was created to help web development for enterprenuership team project.
-이 레포지토리는 기업가 정신 팀 프로젝트에서 웹 개발을 돕기 위해 만들어졌습니다.
+This repository was created to help web development for enterprenuership team project. \
+이 레포지토리는 기업가 정신 팀 프로젝트에서 웹 개발을 돕기 위해 만들어졌습니다. \
 
-The website was built on React environment and uses MUI templates.
-리액트 환경에서 생성되었으며, MUI 탬플릿을 사용했습니다.
+The website was built on React environment and uses MUI templates. \
+리액트 환경에서 생성되었으며, MUI 탬플릿을 사용했습니다. \
 
 ## How to Start (시작하기)
 
-Download this repository by using git clone.
-깃 클론으로 이 레포지토리를 다운받으세요.
+Download this repository by using git clone. \
+깃 클론으로 이 레포지토리를 다운받으세요. \
 
 ```bash
-git clone http://
+git clone https://github.com/Lee-HoJin/enterprenuership_webpage.git
 ```
 
 ## How to Build (사용하기)
 
-This web was created with help of Claude AI.
-이 웹페이지는 클로드 AI의 도움으로 만들어졌습니다.
+This web was created with help of Claude AI. \
+이 웹페이지는 클로드 AI의 도움으로 만들어졌습니다. \
 
-TBA
+TBA \
 
-To run on this project locally, do `npm start`,
-and open http://localhost:3000 or corresponding port number.
-이 프로젝트를 로컬에서 실행시키려면 `npm start`로 실행하시고,
-http://localhost:3000 혹은 대응하는 포트 번호로 여세요.
+To run on this project locally, do `npm start`, \
+and open http://localhost:3000 or corresponding port number.\
+이 프로젝트를 로컬에서 실행시키려면 `npm start`로 실행하시고, \
+http://localhost:3000 혹은 대응하는 포트 번호로 여세요. \
 
 
 ## How to deploy (배포하기)
 
-This repository was deployed through github.io
-이 레포지토리는 github.io로 배포되었습니다.
+This repository was deployed through github.io \
+이 레포지토리는 github.io로 배포되었습니다. \
 
-Content below is previous README for React.
-아래는 기존 도움말입니다.
+Content below is previous README for React. \
+아래는 기존 도움말입니다. \
 ---
 
 
